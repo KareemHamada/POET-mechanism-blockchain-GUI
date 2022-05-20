@@ -2,7 +2,7 @@ from abc import abstractmethod
 from typing import List
 
 from cs741_blockchain.interface.block import Block
-
+# from main import Ui_MainWindow
 
 class Blockchain:
     def __init__(self, created_by):
@@ -62,6 +62,7 @@ class Blockchain:
         #self.chain = longest_chain
 
     def print(self):
+        # Ui_MainWindow.message_viewer.setText('llslslsls')
         print(f"Blockchain:")
         print(f"\tOwned by: {self.owner.name}")
         print(f"\tchain: [")

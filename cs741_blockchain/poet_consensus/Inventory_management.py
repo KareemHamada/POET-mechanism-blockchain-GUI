@@ -1,47 +1,15 @@
 from dataclasses import dataclass
 from random import randint
+from sql import conn
 
 @dataclass
 class Inventory_management:
     def __init__(self,network):
         self.network = network
-        self.products = []
-        self.categories = []
-        self.product()
-        self.management()
+        # self.products = []
+        # self.categories = []
+        #self.management()
         
-        
-    def product(self):
-        print("####################################################################")
-        print("############### Hello in our Inventory management app\n  ##########")
-        print("##################################################################")
-        print("\n")
-        print("\n")
-        print("####################  It is time to enter categories    ###########")
-        while True:
-            category = input("Enter the product category : ")
-            self.categories.append(category)
-            contin = input("Do you want to enter more categories?(y/n): ")
-            if contin.lower() == 'y':
-                continue
-            else:
-                break
-        
-        print("####################################################################")
-        print("#####################     It is time to enter products  ############")
-        print("####################################################################")
-        while True:
-            
-            name = input("Enter the product name : ")
-            category = input(f"Enter the product category {self.categories} : ")
-            self.products.append([name,category])
-
-            contin = input("Do you want to enter more products?(y/n): ")
-            if contin.lower() == 'y':
-                continue
-            else:
-                break
-        return True
 
     def management(self):
         """
@@ -52,9 +20,15 @@ class Inventory_management:
         candidates_list = []
         # list of product of same category
         products_of_same_category = []
-
-        for category in self.categories:
-            for product in self.products:
+        cursor = conn.cursor()
+        categories = cursor.execute("select * from category").fetchall()
+        products = cursor.execute("select * from product").fetchall()
+        categories_list = [category[1] for category in categories]
+        products_list = [[product[1],product[2]] for product in products]
+        # print(categories_list)
+        # print(products_list)
+        for category in categories_list:
+            for product in products_list:
                 if product[1] == category:
                     products_of_same_category.append(product)
             
@@ -77,6 +51,7 @@ class Inventory_management:
                     'Random Times ': {elapsed_time}\n
                     'Selected Time' : {selected_time}\n
                 """)
+            candidates_list = []
             x+= 1
-
-        winner.blockchain.print()
+        return winner 
+        #winner.blockchain.print()
