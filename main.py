@@ -21,7 +21,7 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.header_label = QtWidgets.QLabel(self.centralwidget)
-        self.header_label.setGeometry(QtCore.QRect(10, 30, 880, 50))
+        self.header_label.setGeometry(QtCore.QRect(150, 30, 880, 50))
         self.header_label.setMinimumSize(QtCore.QSize(0, 50))
         self.header_label.setStyleSheet("font-size:25px;")
         self.header_label.setAlignment(QtCore.Qt.AlignCenter)
@@ -152,6 +152,7 @@ class Ui_MainWindow(object):
         self.add_product.clicked.connect(self.add_product_func)
         self.delete_all_products.clicked.connect(self.delete_all_products_func)
         self.request_to_mine.clicked.connect(self.mine)
+        
     def add_category_func(self):
         category_name = self.category.text()
         cursor = conn.cursor()
@@ -215,8 +216,21 @@ class Ui_MainWindow(object):
         fatma_node.blockchain = POET_Blockchain(fatma_node)
 
         obj = Inventory_management(network)
-        owner = obj.management()
+        owner,winner_list,candidates_list,elapsed_time_list,selected_time_list  = obj.management()
         #self.message_viewer.setText(winner.name)
+        self.message_viewer.append("Analysis Prove")
+        x = 1
+        for winner,elapsed_time,selected_time in zip(winner_list,elapsed_time_list,selected_time_list):
+            self.message_viewer.append(f"Info about {x} Block")
+            self.message_viewer.append(f"\t Winner : {winner}")
+            self.message_viewer.append(f"\t Candidates list : {candidates_list}")
+            self.message_viewer.append(f"\t Random time : {elapsed_time}")
+            self.message_viewer.append(f"\t Selected time : {selected_time}")
+            x+=1
+            self.message_viewer.append("")
+
+        self.message_viewer.append("")
+        self.message_viewer.append("")
         chain = owner.blockchain.chain
         self.message_viewer.append("Blockchain:\n")
         self.message_viewer.append(f"\tOwned by: {owner.name}")
